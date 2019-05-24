@@ -5,6 +5,8 @@ import { ListItem } from './ListItem'
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    // id for react's key value
     this.state = { list: [], id: 0 };
     this.addItem = this.addItem.bind(this);
     this.handleButtonPress = this.handleButtonPress.bind(this);
@@ -14,6 +16,7 @@ class App extends React.Component {
     this.componentCleanup = this.componentCleanup.bind(this);
   }
 
+  // Get list and id from storage
   componentWillMount() {
     const todoList = localStorage.todoList !== undefined ? JSON.parse(localStorage.todoList) : [];
     const globalId = localStorage.globalId !== undefined ? JSON.parse(localStorage.globalId) : 0;
@@ -24,6 +27,7 @@ class App extends React.Component {
     })
   }
 
+  // Save needed variables to storage
   componentDidMount() {
     window.addEventListener('beforeunload', this.componentCleanup);
   }
@@ -38,6 +42,8 @@ class App extends React.Component {
     window.removeEventListener('beforeunload', this.componentCleanup);
   }
 
+  /* Change list add, edit value, delete, edit status
+     List is always copied */
   addItem(newItem) {
     const newList = this.state.list.slice();
     const newId = this.state.id + 1;
@@ -46,32 +52,25 @@ class App extends React.Component {
       list: newList,
       id: newId
     });
-    console.log(newId);
   }
 
   editItem(itemId, newVal) {
     const index = this.state.list.findIndex(item => item.id === itemId);
     const newList = this.state.list.slice();
     newList[index] = { id: itemId, value: newVal, status: newList[index].status }
-    this.setState({
-      list: newList
-    });
+    this.setState({ list: newList });
   }
 
   removeItem(itemId) {
     const newList = this.state.list.filter(item => item.id !== itemId);
-    this.setState({
-      list: newList
-    });
+    this.setState({ list: newList });
   }
 
   changeItemStatus(itemId) {
     const index = this.state.list.findIndex(item => item.id === itemId);
     const newList = this.state.list.slice();
     newList[index] = { id: itemId, value: newList[index].value, status: !newList[index].status }
-    this.setState({
-      list: newList
-    });
+    this.setState({ list: newList });
   }
 
   // If user presses Enter add new item to list
@@ -85,7 +84,8 @@ class App extends React.Component {
       e.target.value = '';
     }
   }
-
+  
+  // Convert list to a bucnch of <li>
   ListArrayToList(array) {
     return array.map(item => (<ListItem ItemKey={item.id}
       checked={item.status}
@@ -95,13 +95,18 @@ class App extends React.Component {
   }
 
   render() {
+
+    // split the list in two
     const list = this.state.list;
     const notDoneList = list.filter(item => !item.status);
     const doneList = list.filter(item => item.status);
+
+    // Progress bar calculations
     const percentNotDone = Math.floor((notDoneList.length/list.length) * 100);
     const percentDone = Math.floor((1 - (notDoneList.length/list.length)) * 100);
     const percentStyle1 = `${percentNotDone}%`;
     const percentStyle2 = `${percentDone}%`;
+
     return (
       <div>
         <h3>To Do:</h3>

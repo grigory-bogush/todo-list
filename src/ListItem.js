@@ -11,6 +11,7 @@ export class ListItem extends React.Component {
     this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
   }
 
+  /* These methods call App.js methods */
   handleDeleteClick() {
     this.props.onDeleteItem(this.props.ItemKey);
   }
@@ -36,6 +37,8 @@ export class ListItem extends React.Component {
 
   render() {
     let contents;
+
+    // If default render contents, else render input
     if (this.state.default) {
       contents = (
         <li key={this.props.ItemKey} onDoubleClick={this.handleDbClick}>
