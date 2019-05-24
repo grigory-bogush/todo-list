@@ -9,6 +9,7 @@ export class ListItem extends React.Component {
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleCancelClick = this.handleCancelClick.bind(this);
     this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
+    this.editInput = React.createRef();
   }
 
   /* These methods call App.js methods */
@@ -22,8 +23,8 @@ export class ListItem extends React.Component {
   }
 
   handleSaveClick(e) {
-    const editItemInput = document.getElementById('editItemInput');
-    this.props.onEditItem(this.props.ItemKey, editItemInput.value);
+    const value = this.editInput.current.value;
+    this.props.onEditItem(this.props.ItemKey, value);
     this.setState({ default: true });
   }
 
@@ -49,7 +50,7 @@ export class ListItem extends React.Component {
     } else {
       contents = (
         <li key={this.props.ItemKey}>
-          <input className='todo-list-input' id='editItemInput' type='text' defaultValue={this.props.children}/>
+          <input ref={this.editInput} className='todo-list-input' id='editItemInput' type='text' defaultValue={this.props.children}/>
           <button type='button' onClick={this.handleSaveClick}>Save</button>
           <button type='button' onClick={this.handleCancelClick}>Cancel</button>
         </li>);
