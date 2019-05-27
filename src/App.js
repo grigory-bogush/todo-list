@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { List } from './List';
+import { ListItem } from './ListItem';
 import { ItemInput } from './ItemInput';
 
 class App extends React.Component {
@@ -89,18 +90,27 @@ class App extends React.Component {
     const percentStyle1 = `${percentNotDone}%`;
     const percentStyle2 = `${percentDone}%`;
 
+    const listItemBuilder = (item) => {
+      return (<ListItem key={item.id}
+                        item={item}
+                        onEditItem={this.editItem}
+                        onChangeStatus={this.changeItemStatus}
+                        onDeleteItem={this.removeItem}>
+                        {item.value}
+                        </ListItem>); }
+
     return (
       <div>
         <h3>To Do:</h3>
           <div id='todo-progress-1'><div style={{ width: percentStyle1 }}></div></div>
           <div className='todo-div'>
-            <List list={notDoneList} onEditItem={this.editItem} onChangeStatus={this.changeItemStatus} onDeleteItem={this.removeItem} />
+            <List list={notDoneList}  itemBuilder={listItemBuilder} />
             <ItemInput id={this.state.id} onAddItem={this.addItem}/>
           </div>
         <h3>Done:</h3>
           <div id='todo-progress-2'><div style={{ width: percentStyle2 }}></div></div>
           <div className='todo-div'>
-            <List list={doneList} onEditItem={this.editItem} onChangeStatus={this.changeItemStatus} onDeleteItem={this.removeItem} />
+            <List list={doneList} itemBuilder={listItemBuilder} />
           </div>
       </div>
     );
