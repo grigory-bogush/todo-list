@@ -14,7 +14,7 @@ export class ListItem extends React.Component {
 
   /* These methods call App.js methods */
   handleDeleteClick() {
-    this.props.onDeleteItem(this.props.ItemKey);
+    this.props.onDeleteItem(this.props.item.id);
   }
 
   handleDbClick(e) {
@@ -24,7 +24,7 @@ export class ListItem extends React.Component {
 
   handleSaveClick(e) {
     const value = this.editInput.current.value;
-    this.props.onEditItem(this.props.ItemKey, value);
+    this.props.onEditItem(this.props.item.id, value);
     this.setState({ default: true });
   }
 
@@ -33,7 +33,7 @@ export class ListItem extends React.Component {
   }
 
   handleCheckboxClick() {
-    this.props.onChangeStatus(this.props.ItemKey);
+    this.props.onChangeStatus(this.props.item.id);
   }
 
   render() {
@@ -42,14 +42,14 @@ export class ListItem extends React.Component {
     // If default render contents, else render input
     if (this.state.default) {
       contents = (
-        <li key={this.props.ItemKey} onDoubleClick={this.handleDbClick}>
-          <input className='todo-checkbox' type='checkbox' onClick={this.handleCheckboxClick} defaultChecked={this.props.checked}/>
+        <li onDoubleClick={this.handleDbClick}>
+          <input className='todo-checkbox' type='checkbox' onClick={this.handleCheckboxClick} defaultChecked={this.props.item.status}/>
           {this.props.children}
           <button className='delete-button' type='button' onClick={this.handleDeleteClick}>X</button>
         </li>);
     } else {
       contents = (
-        <li key={this.props.ItemKey}>
+        <li>
           <input ref={this.editInput} className='todo-list-input' id='editItemInput' type='text' defaultValue={this.props.children}/>
           <button type='button' onClick={this.handleSaveClick}>Save</button>
           <button type='button' onClick={this.handleCancelClick}>Cancel</button>

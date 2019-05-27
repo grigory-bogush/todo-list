@@ -55,8 +55,9 @@ class App extends React.Component {
   }
 
   editItem(itemId, newVal) {
-    const index = this.state.list.findIndex(item => item.id === itemId);
     const newList = this.state.list.slice();
+    const index = newList.findIndex(item => item.id === itemId);
+
     newList[index] = { id: itemId, value: newVal, status: newList[index].status }
     this.setState({ list: newList });
   }
@@ -67,8 +68,8 @@ class App extends React.Component {
   }
 
   changeItemStatus(itemId) {
-    const index = this.state.list.findIndex(item => item.id === itemId);
     const newList = this.state.list.slice();
+    const index = newList.findIndex(item => item.id === itemId);
     newList[index] = { id: itemId, value: newList[index].value, status: !newList[index].status }
     this.setState({ list: newList });
   }
@@ -84,11 +85,11 @@ class App extends React.Component {
       e.target.value = '';
     }
   }
-  
+
   // Convert list to a bucnch of <li>
   ListArrayToList(array) {
-    return array.map(item => (<ListItem ItemKey={item.id}
-      checked={item.status}
+    return array.map(item => (<ListItem key={item.id}
+      item={item}
       onChangeStatus={this.changeItemStatus}
       onEditItem={this.editItem}
       onDeleteItem={this.removeItem}>{item.value}</ListItem>));
@@ -103,7 +104,7 @@ class App extends React.Component {
 
     // Progress bar calculations
     const percentNotDone = Math.floor((notDoneList.length/list.length) * 100);
-    const percentDone = Math.floor((1 - (notDoneList.length/list.length)) * 100);
+    const percentDone = Math.floor((doneList.length/list.length) * 100);
     const percentStyle1 = `${percentNotDone}%`;
     const percentStyle2 = `${percentDone}%`;
 
